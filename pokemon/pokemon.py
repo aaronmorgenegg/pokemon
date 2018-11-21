@@ -9,5 +9,9 @@ class Pokemon:
         try:
             self.forms = data['forms']
         except KeyError:
-            self.forms = None
+            self.forms = {}
+        try:
+            self.moves = data['moves']
+        except KeyError:
+            self.moves = []
 

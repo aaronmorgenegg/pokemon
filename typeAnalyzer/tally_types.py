@@ -1,23 +1,22 @@
+from gameData.constants import GAME_LETS_GO_PIKACHU
 from gameData.game_data import getGameData
 from typeAnalyzer.api_reader import API_Reader
 
-GAME_DATA = getGameData("lgp")
+GAME_DATA = getGameData(GAME_LETS_GO_PIKACHU)
 
 def tallyTypes():
-    api = API_Reader()
     type_data = {}
 
     for pokemon in GAME_DATA['pokemon']:
-        data = api.get('pokemon', pokemon)
-        types = data['types']
+        types = pokemon.types
         for t in types:
             try:
                 type_data[t] += 1
             except KeyError:
                 type_data[t] = 1
-        for form in data['forms']:
+        for form, value in pokemon.forms.items():
             if form != 'partner':
-                for t in form['types']:
+                for t in value.types:
                     try:
                         type_data[t] += 1
                     except KeyError:

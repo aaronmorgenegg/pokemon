@@ -1,15 +1,22 @@
-from gameData.game_data import loadPokemonFromAPI, addPokemonForm
+from gameData import game_data
+from gameData.constants import GAME_LETS_GO_PIKACHU
 from pokemon.pokemon import Pokemon
+from typeAnalyzer.constants import VERBOSITY
 
 
 def getLetsGoPikachuGameData():
-    data = {}
-    data['pokemon'] = getLetsGoPikachuPokemonData()
-    return data
+    try:
+        if VERBOSITY >=2: print("Loading cached data from {}.pickle".format(GAME_LETS_GO_PIKACHU))
+        return game_data.loadGameData("{}.pickle".format(GAME_LETS_GO_PIKACHU))
+    except FileNotFoundError:
+        data = {}
+        data['pokemon'] = getLetsGoPikachuPokemonData()
+        game_data.saveGameData(data, "{}.pickle".format(GAME_LETS_GO_PIKACHU))
+        return data
 
 def getLetsGoPikachuPokemonData():
     pokemon_indices = [i for i in range(1, 151)]
-    pokemon = loadPokemonFromAPI(pokemon_indices)
+    pokemon = game_data.loadPokemonFromAPI(pokemon_indices)
 
     addPartnerPokemon(pokemon)
     addAlolaPokemon(pokemon)
@@ -35,10 +42,10 @@ def addPartnerPokemon(pokemon):
     partner_pikachu_data['fully_evolved'] = True
 
     partner_pikachu = Pokemon(partner_pikachu_data)
-    addPokemonForm(pokemon, 'partner', 25, partner_pikachu)
+    game_data.addPokemonForm(pokemon, 'partner', 25, partner_pikachu)
 
 def addAlolaPokemon(pokemon):
-    # diglet
+    # diglett
     diglett_data = {}
     diglett_data['identifier'] = 50
     diglett_data['name'] = 'diglett-alola'
@@ -54,7 +61,7 @@ def addAlolaPokemon(pokemon):
     diglett_data['fully_evolved'] = False
 
     diglett = Pokemon(diglett_data)
-    addPokemonForm(pokemon, 'alola', 50, diglett)
+    game_data.addPokemonForm(pokemon, 'alola', 50, diglett)
     # dugtrio
     dugtrio_data = {}
     dugtrio_data['identifier'] = 51
@@ -71,7 +78,7 @@ def addAlolaPokemon(pokemon):
     dugtrio_data['fully_evolved'] = False
 
     dugtrio = Pokemon(dugtrio_data)
-    addPokemonForm(pokemon, 'alola', 51, dugtrio)
+    game_data.addPokemonForm(pokemon, 'alola', 51, dugtrio)
     # exeggutor
     exeggutor_data = {}
     exeggutor_data['identifier'] = 103
@@ -88,7 +95,7 @@ def addAlolaPokemon(pokemon):
     exeggutor_data['fully_evolved'] = True
 
     exeggutor = Pokemon(exeggutor_data)
-    addPokemonForm(pokemon, 'alola', 103, exeggutor)
+    game_data.addPokemonForm(pokemon, 'alola', 103, exeggutor)
     # geodude
     # golem
     # graveler

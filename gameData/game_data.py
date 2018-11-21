@@ -2,11 +2,12 @@ import pickle
 
 from gameData.constants import FULLY_EVOLVED, GAME_LETS_GO_PIKACHU
 from gameData.games.letsGoPikachu import getLetsGoPikachuGameData
+from pokemon.pokemon import Pokemon
 from typeAnalyzer.api_reader import API_Reader
 
 
 def getGameData(game):
-    if game.lower() in GAME_LETS_GO_PIKACHU:
+    if game == GAME_LETS_GO_PIKACHU:
         return getLetsGoPikachuGameData()
 
 def saveGameData(data, filename):
@@ -36,22 +37,22 @@ def loadPokemonDataFromResponse(response):
     data['stats'] = loadPokemonStatsFromResponse(response)
     if response['index'] in FULLY_EVOLVED: data['fully_evolved'] = True
     else: data['fully_evolved'] = False
-    return data
+    return Pokemon(data)
 
 def loadPokemonTypesFromResponse(response):
-    types = {}
-    types.append(response['types']['0']['type']['name'])
+    types = []
+    types.append(response['types'][0]['type']['name'])
     try:
-        types.append(response['types']['1']['type']['name'])
-    except KeyError:
+        types.append(response['types'][1]['type']['name'])
+    except IndexError:
         pass
     return types
 
 def loadPokemonStatsFromResponse(response):
     stats = {}
     for i in range(6):
-        stat_name = response['stats'][str(i)]['stat']['name']
-        stats[stat_name] = response['stats'][str(i)]['base_stat']
+        stat_name = response['stats'][i]['stat']['name']
+        stats[stat_name] = response['stats'][i]['base_stat']
     return stats
 
 def addPokemonForm(pokemon, form, identifier, pokemon_data):

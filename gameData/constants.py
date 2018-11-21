@@ -6,4 +6,4 @@ FULLY_EVOLVED = [3,6,9,12,15,18,20,22,24,26,28,31,34,36,38,
                  131,132,134,135,136,137,139,141,142,143,144,
                  145,146,149,150,151]
 
-GAME_LETS_GO_PIKACHU = ["lgp", "lets_go_pikachu", "lets go pikachu", "pikachu"]
+GAME_LETS_GO_PIKACHU = "lets_go_pikachu"
