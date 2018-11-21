@@ -18,10 +18,10 @@ class TypeAnalyzer:
         try:
             return TypeAnalyzer.type_cache[single_type]
         except KeyError:
-            type_data = {'defense': {}, 'offense': {}}
+            type_data = {'defense': {}, 'attack': {}}
             for t in TYPES:
                 type_data['defense'][t] = 1
-                type_data['offense'][t] = 1
+                type_data['attack'][t] = 1
             api = API_Reader()
             response = api.get("type", single_type)
             TypeAnalyzer.extractDamageRelations(response, type_data)
@@ -33,11 +33,11 @@ class TypeAnalyzer:
     def extractDamageRelations(response, type_data):
         damage_relations = response['damage_relations']
         for relation in damage_relations['no_damage_to']:
-            type_data['offense'][relation['name']] = 0
+            type_data['attack'][relation['name']] = 0
         for relation in damage_relations['half_damage_to']:
-            type_data['offense'][relation['name']] = .5
+            type_data['attack'][relation['name']] = .5
         for relation in damage_relations['double_damage_to']:
-            type_data['offense'][relation['name']] = 2
+            type_data['attack'][relation['name']] = 2
         for relation in damage_relations['no_damage_from']:
             type_data['defense'][relation['name']] = 0
         for relation in damage_relations['half_damage_from']:
@@ -51,12 +51,12 @@ class TypeAnalyzer:
         try:
             return TypeAnalyzer.type_cache[dual_type]
         except KeyError:
-            type_data = {'defense': {}, 'offense': {}}
+            type_data = {'defense': {}, 'attack': {}}
             type_data1 = TypeAnalyzer.analyzeSingleType(types[0])
             type_data2 = TypeAnalyzer.analyzeSingleType(types[1])
 
-            for key, value in type_data1['offense'].items():
-                type_data['offense'][key] = value * type_data2['offense'][key]
+            for key, value in type_data1['attack'].items():
+                type_data['attack'][key] = value * type_data2['attack'][key]
             for key, value in type_data1['defense'].items():
                 type_data['defense'][key] = value * type_data2['defense'][key]
 

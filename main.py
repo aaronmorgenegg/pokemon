@@ -4,8 +4,7 @@ from pokemon.pokedex import Pokedex
 from typeAnalyzer.type_analyzer import TypeAnalyzer
 
 
-# POKEDEX = Pokedex(getGameData(GAME_LETS_GO_PIKACHU))
-#
-# print(POKEDEX.tallyTypes())
+POKEDEX = Pokedex(getGameData(GAME_LETS_GO_PIKACHU))
+POKEDEX.rateStats("venusaur")
 
-print(TypeAnalyzer.analyze(['ground', 'water']))
+# print(TypeAnalyzer.analyze(['ground', 'water']))
