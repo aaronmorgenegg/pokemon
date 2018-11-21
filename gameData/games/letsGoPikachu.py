@@ -9,6 +9,7 @@ def getLetsGoPikachuGameData():
         if VERBOSITY >=2: print("Loading cached data from {}.pickle".format(GAME_LETS_GO_PIKACHU))
         return game_data.loadGameData("{}.pickle".format(GAME_LETS_GO_PIKACHU))
     except FileNotFoundError:
+        if VERBOSITY >=2: print("Cached data not found. Retrieving data from PokeAPI".format(GAME_LETS_GO_PIKACHU))
         data = {}
         data['pokemon'] = getLetsGoPikachuPokemonData()
         game_data.saveGameData(data, "{}.pickle".format(GAME_LETS_GO_PIKACHU))
