@@ -1,5 +1,7 @@
 import requests
-from constants import POKE_API, VERBOSITY
+
+from typeAnalyzer.constants import VERBOSITY, POKE_API
+
 
 class API_Reader:
     def get(self, datatype, identifier):
