@@ -29,6 +29,30 @@ class Pokedex:
 
             return self.tallied_types
 
+    def computeStatsStats(self):
+        """Compute various statistics(average, std dev) about pokemon stats(hp, attack etc)"""
+        try:
+            return self.stats_stats
+        except AttributeError:
+            self.stats_stats = {}
+
+            for pokemon in self.pokemon:
+                types = pokemon.types
+                for t in types:
+                    try:
+                        self.stats_stats[t] += 1
+                    except KeyError:
+                        self.stats_stats[t] = 1
+                for form, value in pokemon.forms.items():
+                    if form != 'partner':
+                        for t in value.types:
+                            try:
+                                self.stats_stats[t] += 1
+                            except KeyError:
+                                self.stats_stats[t] = 1
+
+            return self.stats_stats
+
     @staticmethod
     def savePokedex(data, filename):
         with open(filename, 'wb') as handle:
