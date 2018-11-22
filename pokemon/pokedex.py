@@ -19,7 +19,7 @@ class Pokedex:
                 self.type_stats[type] = {'count': 0, 'defense': 0, 'attack': 0}
 
             self.tallyTypes()
-            self._computeTypeRatings # TODO compute the offensive and defensive ratings for each type,
+            # self._computeTypeRatings # TODO compute the offensive and defensive ratings for each type,
             # TODO, based on the effectiveness to other types, and how many pokemon are resistant/weak to that type
 
             return self.type_stats

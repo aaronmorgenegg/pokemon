@@ -5,6 +5,6 @@ from typeAnalyzer.type_analyzer import TypeAnalyzer
 
 
 POKEDEX = Pokedex(getGameData(GAME_LETS_GO_PIKACHU))
-POKEDEX.rateStats("venusaur")
+POKEDEX.rateStats("alakazam")
 
 # print(TypeAnalyzer.analyze(['ground', 'water']))
