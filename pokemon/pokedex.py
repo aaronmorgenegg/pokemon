@@ -80,9 +80,57 @@ class Pokedex:
         pokemon = self.getPokemon(pokemon_key)
         stat_ratings = {}
         for stat, value in pokemon.stats.items():
-            stat_ratings[stat] = self.stats_stats['stats'][stat]['values'].index(value)/len(self.stats_stats['stats'][stat]['values'])
-            print("Pokemon {} is at the top {}% of {}".format(pokemon_key, round(stat_ratings[stat]*100,2), stat))
+            index = self.stats_stats['stats'][stat]['values'].index(value)
+            total = len(self.stats_stats['stats'][stat]['values'])
+            stat_ratings[stat] = index/total
+            print("Pokemon {} is at the top {}% of {}, out of {}/{}".format(pokemon_key, round(stat_ratings[stat]*100,2), stat, index, total))
         print(TypeAnalyzer.analyze(pokemon.types))
+
+    def rateMoveCoverage(self, moves):
+        move_coverage = self.checkMoveCoverage(moves)
+        for key, value in move_coverage.items():
+            print("Covers the following {} pokemon at {}: {}".format(len(value), key, value))
+
+    def checkMoveCoverage(self, moves):
+        self.computeStatsStats()
+        self.computeTypeStats()
+        coverage = {"4.0":[],"2.0":[],"1.0":[],"0.5":[],"0.25":[],"0.0":[]}
+        for pokemon in self.pokemon:
+            if pokemon.fully_evolved:
+                best_move = 0.0
+                type_effectiveness = TypeAnalyzer.analyze(pokemon.types)['defense']
+                for move in moves:
+                    effectiveness = type_effectiveness[move]
+                    if effectiveness > best_move:
+                        best_move = effectiveness
+                coverage[str(best_move)].append(pokemon.name)
+
+                for form, value in pokemon.forms.items():
+                    best_move = 0.0
+                    type_effectiveness = TypeAnalyzer.analyze(value.types)['defense']
+                    for move in moves:
+                        effectiveness = type_effectiveness[move]
+                        if effectiveness > best_move:
+                            best_move = effectiveness
+                    coverage[str(best_move)].append(value.name)
+        return coverage
+
+    def rateBestOffensiveTypes(self):
+        self.computeTypeStats()
+        for type in TYPES:
+            coverage = {"4.0":0,"2.0":0,"1.0":0,"0.5":0,"0.25":0,"0.0":0}
+            for pokemon in self.pokemon:
+                if pokemon.fully_evolved:
+                    type_effectiveness = TypeAnalyzer.analyze(pokemon.types)['defense']
+                    coverage[str(type_effectiveness[type])] += 1
+
+                    for form, value in pokemon.forms.items():
+                        type_effectiveness = TypeAnalyzer.analyze(value.types)['defense']
+                        coverage[str(type_effectiveness[type])] += 1
+            print("{} type is good against:".format(type))
+            for key, value in coverage.items():
+                print("    {} pokemon at {} effectiveness".format(value, key))
+
 
     def _computeStatTotals(self):
         for pokemon in self.pokemon:

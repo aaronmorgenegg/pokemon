@@ -20,8 +20,8 @@ class TypeAnalyzer:
         except KeyError:
             type_data = {'defense': {}, 'attack': {}}
             for t in TYPES:
-                type_data['defense'][t] = 1
-                type_data['attack'][t] = 1
+                type_data['defense'][t] = 1.0
+                type_data['attack'][t] = 1.0
             api = API_Reader()
             response = api.get("type", single_type)
             TypeAnalyzer.extractDamageRelations(response, type_data)
@@ -33,17 +33,17 @@ class TypeAnalyzer:
     def extractDamageRelations(response, type_data):
         damage_relations = response['damage_relations']
         for relation in damage_relations['no_damage_to']:
-            type_data['attack'][relation['name']] = 0
+            type_data['attack'][relation['name']] = 0.0
         for relation in damage_relations['half_damage_to']:
             type_data['attack'][relation['name']] = .5
         for relation in damage_relations['double_damage_to']:
-            type_data['attack'][relation['name']] = 2
+            type_data['attack'][relation['name']] = 2.0
         for relation in damage_relations['no_damage_from']:
-            type_data['defense'][relation['name']] = 0
+            type_data['defense'][relation['name']] = 0.0
         for relation in damage_relations['half_damage_from']:
             type_data['defense'][relation['name']] = .5
         for relation in damage_relations['double_damage_from']:
-            type_data['defense'][relation['name']] = 2
+            type_data['defense'][relation['name']] = 2.0
 
     @staticmethod
     def analyzeDoubleType(types):
